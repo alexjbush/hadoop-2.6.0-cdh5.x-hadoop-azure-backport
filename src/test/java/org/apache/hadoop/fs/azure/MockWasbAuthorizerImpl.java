@@ -89,14 +89,14 @@ public class MockWasbAuthorizerImpl implements WasbAuthorizerInterface {
     // In case of root("/"), owner match does not happen because owner is returned as empty string.
     // we try to force owner match just for purpose of tests to make sure all operations work seemlessly with owner.
     if (this.performOwnerMatch
-      && StringUtils.equalsIgnoreCase(wasbAbsolutePath, qualifiedPrefixUrl + "/")) {
+      && wasbAbsolutePath.equalsIgnoreCase(qualifiedPrefixUrl + "/")) {
       owner = currentUserShortName;
     }
 
     boolean shouldEvaluateOwnerAccess = owner != null && !owner.isEmpty()
       && this.performOwnerMatch;
 
-    boolean isOwnerMatch =  StringUtils.equalsIgnoreCase(currentUserShortName, owner);
+    boolean isOwnerMatch =  currentUserShortName.equalsIgnoreCase(owner);
 
     AuthorizationComponent component =
         new AuthorizationComponent(wasbAbsolutePath, accessType);

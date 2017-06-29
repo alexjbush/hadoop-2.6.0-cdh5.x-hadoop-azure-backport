@@ -22,7 +22,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import org.apache.hadoop.fs.StreamCapabilities;
 import org.apache.hadoop.fs.Syncable;
 
 /**
@@ -32,18 +31,10 @@ import org.apache.hadoop.fs.Syncable;
  * for HBase when wrapping a PageBlobOutputStream used as a write-ahead log.
  */
 public class SyncableDataOutputStream extends DataOutputStream
-    implements Syncable, StreamCapabilities {
+    implements Syncable {
 
   public SyncableDataOutputStream(OutputStream out) {
     super(out);
-  }
-
-  @Override
-  public boolean hasCapability(String capability) {
-    if (out instanceof StreamCapabilities) {
-      return ((StreamCapabilities) out).hasCapability(capability);
-    }
-    return false;
   }
 
   @Override

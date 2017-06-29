@@ -237,8 +237,7 @@ public final class AzureBlobStorageTestAccount {
       new org.apache.hadoop.metrics2.impl.ConfigBuilder()
       .add("azure-file-system.sink.azuretestcollector.class",
           StandardCollector.class.getName())
-      .save(TestMetricsConfig.getTestFilename(
-          "hadoop-metrics2-azure-file-system.properties"));
+      .save("hadoop-metrics2-azure-file-system.properties");
       metricsConfigSaved = true;
     }
   }

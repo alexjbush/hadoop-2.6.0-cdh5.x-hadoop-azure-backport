@@ -26,7 +26,7 @@ import org.apache.http.StatusLine;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.DefaultHttpClient;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -57,7 +57,7 @@ class WasbRemoteCallHelper {
   }
 
   public WasbRemoteCallHelper() {
-    this.client = HttpClientBuilder.create().build();
+    this.client = new DefaultHttpClient();
   }
 
   /**

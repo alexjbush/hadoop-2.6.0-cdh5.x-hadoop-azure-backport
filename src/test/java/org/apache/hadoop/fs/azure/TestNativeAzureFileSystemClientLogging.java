@@ -24,6 +24,7 @@ import static org.junit.Assert.assertTrue;
 import java.net.URI;
 import java.util.StringTokenizer;
 
+import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.test.GenericTestUtils.LogCapturer;
@@ -98,7 +99,7 @@ public class TestNativeAzureFileSystemClientLogging
   public void testLoggingEnabled() throws Exception {
 
     LogCapturer logs = LogCapturer.captureLogs(
-        LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME));
+        LogFactory.getLog(TestNativeAzureFileSystemClientLogging.class));
 
     // Update configuration based on the Test.
     updateFileSystemConfiguration(true);
@@ -112,7 +113,7 @@ public class TestNativeAzureFileSystemClientLogging
   public void testLoggingDisabled() throws Exception {
 
     LogCapturer logs = LogCapturer.captureLogs(
-        LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME));
+        LogFactory.getLog(TestNativeAzureFileSystemClientLogging.class));
 
     // Update configuration based on the Test.
     updateFileSystemConfiguration(false);
