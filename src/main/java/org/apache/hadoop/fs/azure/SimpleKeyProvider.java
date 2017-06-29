@@ -39,19 +39,8 @@ public class SimpleKeyProvider implements KeyProvider {
 
   @Override
   public String getStorageAccountKey(String accountName, Configuration conf)
-      throws KeyProviderException {
-    String key = null;
-    try {
-      Configuration c = ProviderUtils.excludeIncompatibleCredentialProviders(
-          conf, NativeAzureFileSystem.class);
-      char[] keyChars = c.getPassword(getStorageAccountKeyName(accountName));
-      if (keyChars != null) {
-        key = new String(keyChars);
-      }
-    } catch(IOException ioe) {
-      LOG.warn("Unable to get key from credential providers.", ioe);
-    }
-    return key;
+          throws KeyProviderException {
+    return conf.get(getStorageAccountKeyName(accountName));
   }
 
   protected String getStorageAccountKeyName(String accountName) {

@@ -42,6 +42,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.google.common.base.Preconditions;
 import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.classification.InterfaceAudience;
 import org.apache.hadoop.classification.InterfaceStability;
@@ -818,6 +819,39 @@ public class NativeAzureFileSystem extends FileSystem {
       }
     }
 
+    public static final String EOF_IN_READ_FULLY =
+            "End of file reached before reading fully.";
+
+    public static final String TOO_MANY_BYTES_FOR_DEST_BUFFER
+            = "Requested more bytes than destination buffer size";
+
+    /**
+     * Validation code, available for use in subclasses.
+     * @param position position: if negative an EOF exception is raised
+     * @param buffer destination buffer
+     * @param offset offset within the buffer
+     * @param length length of bytes to read
+     * @throws EOFException if the position is negative
+     * @throws IndexOutOfBoundsException if there isn't space for the amount of
+     * data requested.
+     * @throws IllegalArgumentException other arguments are invalid.
+     */
+    protected void validatePositionedReadArgs(long position,
+                                              byte[] buffer, int offset, int length) throws EOFException {
+      Preconditions.checkArgument(length >= 0, "length is negative");
+      if (position < 0) {
+        throw new EOFException("position is negative");
+      }
+      Preconditions.checkArgument(buffer != null, "Null buffer");
+      if (buffer.length - offset < length) {
+        throw new IndexOutOfBoundsException(
+                TOO_MANY_BYTES_FOR_DEST_BUFFER
+                        + ": request length=" + length
+                        + ", with offset ="+ offset
+                        + "; buffer capacity =" + (buffer.length - offset));
+      }
+    }
+
     @Override
     public synchronized  void readFully(long position, byte[] buffer, int offset, int length)
         throws IOException {
@@ -833,7 +867,7 @@ public class NativeAzureFileSystem extends FileSystem {
             offset + nread,
             length - nread);
         if (nbytes < 0) {
-          throw new EOFException(FSExceptionMessages.EOF_IN_READ_FULLY);
+          throw new EOFException(EOF_IN_READ_FULLY);
         }
         nread += nbytes;
       }
